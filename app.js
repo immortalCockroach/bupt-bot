@@ -61,7 +61,7 @@ var instructions = 'Welcome to Bupt Question-answer Online Bot!Input \'Help\' fo
 var bot = new builder.UniversalBot(connector, function (session) {
 
     var text = session.message.text.toLocaleLowerCase();
-
+    console.log(text);
 
 
     // var reply = new builder.Message()
@@ -723,25 +723,31 @@ bot.dialog('schoolinfo', function (session, args) {
     var entities = args.intent.entities;
     var intent = args.intent;
     console.log(entities);
-    
+    console.log(args);
     var school = builder.EntityRecognizer.findEntity(args.intent.entities,'学校');
     var info = builder.EntityRecognizer.findEntity(args.intent.entities,'学校属性');
 
+    // 找不到学校的属性时的操作
+    if (info == null) {
+        session.send("sorry, 暂时找不到答案");
+    } else {
+        
+        var name = "学校";
+        var prop2 = info.entity.replace(/\s+/g,"").replace(/多少/g, "").replace(/数/g,"").replace(/学校/g,"").replace(/高校/g,"")|| "";
+        console.log(prop2);
+        var intro = "简介";
+        
+        queryDatabase(name,name,"北邮",prop2).then(function(result){
+            if(result== 1){
+                session.send('答案：肯定啊');
+            }else if (result == 0) {
+                session.send('答案：还不是，555555');
+            }else{
+                session.send('答案：'+result);
+            }
+        })
+    }
 
-    var name = "学校";
-    var prop2 = info.entity.replace(/\s+/g,"").replace(/多少/g, "").replace(/数/g,"").replace(/学校/g,"").replace(/高校/g,"")|| "";
-    console.log(prop2);
-    var intro = "简介";
-    
-    queryDatabase(name,name,"北邮",prop2).then(function(result){
-        if(result== 1){
-            session.send('答案：肯定啊');
-        }else if (result == 0) {
-            session.send('答案：还不是，555555');
-        }else{
-            session.send('答案：'+result);
-        }
-    })
 
 }).triggerAction({
     matches: '学校信息'
