@@ -142,8 +142,8 @@ bot.dialog('peopleName', function (session, args) {
     if(leastLevel && position){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
         if(name!="学校"){
-            var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
-            var positionName = (position.resolution.values[0]?position.resolution.values[0]:position.entity).replace(/\s+/g, "") || "";
+            var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+            var positionName = (position.resolution?position.resolution.values[0]:position.entity).replace(/\s+/g, "") || "";
             queryDatabase(name,name,nameValue,positionName).then(function(result){
                 if(result){
                     session.send('答案：'+result);
@@ -188,7 +188,7 @@ bot.dialog('startTime', function (session, args) {
     // 最小单位+职位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var startTime = "成立时间";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,startTime).then(function(result){
@@ -235,7 +235,7 @@ bot.dialog('introduction', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -278,7 +278,7 @@ bot.dialog('website', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var website = "网址";
 
         if (name!="学校") {
@@ -326,7 +326,7 @@ bot.dialog('phone', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var phone = "联系电话";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,phone).then(function(result){
@@ -373,7 +373,7 @@ bot.dialog('teacherNum', function (session, args) {
 
     if(academic){
         var name = "学院";
-        var prop1 = (academic.resolution.values[0]?academic.resolution.values[0]:academic.entity).replace(/\s+/g, "") || "";
+        var prop1 = (academic.resolution?academic.resolution.values[0]:academic.entity).replace(/\s+/g, "") || "";
         for(var i in entities){
             if(entities[i].type!="学院"){
                 var prop2= entities[i].entity.replace(/\s+/g, "")+"人数" || "";
@@ -417,7 +417,7 @@ bot.dialog('list', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -457,7 +457,7 @@ bot.dialog('workplace', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -498,7 +498,7 @@ bot.dialog('address', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -538,7 +538,7 @@ bot.dialog('numberCollect', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -578,7 +578,7 @@ bot.dialog('timeSearch', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -618,7 +618,7 @@ bot.dialog('research', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -658,7 +658,7 @@ bot.dialog('prebuiltTime', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -698,7 +698,7 @@ bot.dialog('email', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "邮箱";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
