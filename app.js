@@ -61,7 +61,7 @@ var instructions = 'Welcome to Bupt Question-answer Online Bot!Input \'Help\' fo
 var bot = new builder.UniversalBot(connector, function (session) {
 
     var text = session.message.text.toLocaleLowerCase();
-    console.log(text);
+
 
 
     // var reply = new builder.Message()
@@ -227,9 +227,10 @@ bot.dialog('introduction', function (session, args) {
     var prop = builder.EntityRecognizer.findEntity(args.intent.entities,'属性');
     var project = builder.EntityRecognizer.findEntity(args.intent.entities,'项目');
     var fundation = builder.EntityRecognizer.findEntity(args.intent.entities,'机构');
+    var center = builder.EntityRecognizer.findEntity(args.intent.entities,'中心');
 
 
-    var leastLevel = lab?lab:(academic?academic:school);
+    var leastLevel = center?center:(lab?lab:(academic?academic:school));
     console.log(leastLevel);
 
     // 最小单位
@@ -271,8 +272,9 @@ bot.dialog('website', function (session, args) {
     
     var academic = builder.EntityRecognizer.findEntity(args.intent.entities,'学院');
     var school = builder.EntityRecognizer.findEntity(args.intent.entities,'学校');
+    var lab = builder.EntityRecognizer.findEntity(args.intent.entities,'实验室');
 
-    var leastLevel = academic?academic:school;
+    var leastLevel = lab?lab:(academic?academic:school);
     console.log(leastLevel);
 
     // 最小单位
@@ -376,7 +378,8 @@ bot.dialog('teacherNum', function (session, args) {
         var prop1 = (academic.resolution?academic.resolution.values[0]:academic.entity).replace(/\s+/g, "") || "";
         for(var i in entities){
             if(entities[i].type!="学院"){
-                var prop2= entities[i].entity.replace(/\s+/g, "")+"人数" || "";
+               var prop2= entities[i].entity.replace(/\s+/g, "").replace(/多少/g,"")+"人数" || "";
+               break;           
             }
         }
         
@@ -395,7 +398,7 @@ bot.dialog('teacherNum', function (session, args) {
     matches: '教师人数'
 });
 
-//列表
+//列表  没处理。。。
 bot.dialog('list', function (session, args) {
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
@@ -421,11 +424,19 @@ bot.dialog('list', function (session, args) {
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }
         
@@ -458,14 +469,22 @@ bot.dialog('workplace', function (session, args) {
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
         var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
-        var intro = "简介";
+        var prop = "办公室";
         if(name!="学校"){
-            queryDatabase(name,name,nameValue,intro).then(function(result){
-                session.send('答案：'+result);
+            queryDatabase(name,name,nameValue,prop).then(function(result){
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }else{
-            queryDatabase(name,name,"北邮",intro).then(function(result){
-                session.send('答案：'+result);
+            queryDatabase(name,name,"北邮",prop).then(function(result){
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }
         
@@ -502,11 +521,19 @@ bot.dialog('address', function (session, args) {
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }
         
@@ -530,6 +557,7 @@ bot.dialog('numberCollect', function (session, args) {
     var prop = builder.EntityRecognizer.findEntity(args.intent.entities,'属性');
     var project = builder.EntityRecognizer.findEntity(args.intent.entities,'项目');
     var fundation = builder.EntityRecognizer.findEntity(args.intent.entities,'机构');
+    var number = builder.EntityRecognizer.findEntity(args.intent.entities,'数字');
 
 
     var leastLevel = lab?lab:(academic?academic:school);
@@ -539,14 +567,22 @@ bot.dialog('numberCollect', function (session, args) {
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
         var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
-        var intro = "简介";
+        var num = number.entity.replace(/\s+/g, "") || "";
         if(name!="学校"){
-            queryDatabase(name,name,nameValue,intro).then(function(result){
-                session.send('答案：'+result);
+            queryDatabase(name,name,nameValue,num).then(function(result){
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }else{
-            queryDatabase(name,name,"北邮",intro).then(function(result){
-                session.send('答案：'+result);
+            queryDatabase(name,name,"北邮",num).then(function(result){
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }
         
@@ -556,7 +592,7 @@ bot.dialog('numberCollect', function (session, args) {
     matches: '数量统计'
 });
 
-//时间查询
+//时间查询   没有搞。。。
 bot.dialog('timeSearch', function (session, args) {
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
@@ -582,11 +618,19 @@ bot.dialog('timeSearch', function (session, args) {
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }
         
@@ -604,29 +648,31 @@ bot.dialog('research', function (session, args) {
     var intent = args.intent;
     console.log(entities);
     
-    var academic = builder.EntityRecognizer.findEntity(args.intent.entities,'学院');
+    
     var lab = builder.EntityRecognizer.findEntity(args.intent.entities,'实验室');
-    var school = builder.EntityRecognizer.findEntity(args.intent.entities,'学校');
-    var prop = builder.EntityRecognizer.findEntity(args.intent.entities,'属性');
-    var project = builder.EntityRecognizer.findEntity(args.intent.entities,'项目');
-    var fundation = builder.EntityRecognizer.findEntity(args.intent.entities,'机构');
+    var center = builder.EntityRecognizer.findEntity(args.intent.entities,'中心');
+    var teacher = builder.EntityRecognizer.findEntity(args.intent.entities,'人名');
 
-
-    var leastLevel = lab?lab:(academic?academic:school);
+    var leastLevel = teacher?teacher:(lab?lab:center);
     console.log(leastLevel);
 
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
         var nameValue = (leastLevel.resolution?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
-        var intro = "简介";
-        if(name!="学校"){
-            queryDatabase(name,name,nameValue,intro).then(function(result){
-                session.send('答案：'+result);
-            })
+        if (name == "中心") {
+            var way = "研究领域";
         }else{
-            queryDatabase(name,name,"北邮",intro).then(function(result){
-                session.send('答案：'+result);
+            var way = "研究方向";
+        }
+        
+        if(name =="人名"){
+            queryDatabase("老师","老师",nameValue,way).then(function(result){
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }
         
@@ -636,7 +682,7 @@ bot.dialog('research', function (session, args) {
     matches: '研究方向'
 });
 
-//筹建时间
+//筹建时间 没搞。。。
 bot.dialog('prebuiltTime', function (session, args) {
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
@@ -662,11 +708,19 @@ bot.dialog('prebuiltTime', function (session, args) {
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }
         
@@ -702,11 +756,19 @@ bot.dialog('email', function (session, args) {
         var intro = "邮箱";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
-                session.send('答案：'+result);
+                if(result){
+                    session.send('答案：'+result);
+                }else{
+                    session.send('对不起，该信息官网还未透露~~');
+                }
             })
         }
         
@@ -723,31 +785,25 @@ bot.dialog('schoolinfo', function (session, args) {
     var entities = args.intent.entities;
     var intent = args.intent;
     console.log(entities);
-    console.log(args);
+    
     var school = builder.EntityRecognizer.findEntity(args.intent.entities,'学校');
     var info = builder.EntityRecognizer.findEntity(args.intent.entities,'学校属性');
 
-    // 找不到学校的属性时的操作
-    if (info == null) {
-        session.send("sorry, 暂时找不到答案");
-    } else {
-        
-        var name = "学校";
-        var prop2 = info.entity.replace(/\s+/g,"").replace(/多少/g, "").replace(/数/g,"").replace(/学校/g,"").replace(/高校/g,"")|| "";
-        console.log(prop2);
-        var intro = "简介";
-        
-        queryDatabase(name,name,"北邮",prop2).then(function(result){
-            if(result== 1){
-                session.send('答案：肯定啊');
-            }else if (result == 0) {
-                session.send('答案：还不是，555555');
-            }else{
-                session.send('答案：'+result);
-            }
-        })
-    }
 
+    var name = "学校";
+    var prop2 = info.entity.replace(/\s+/g,"").replace(/多少/g, "").replace(/数/g,"").replace(/学校/g,"").replace(/高校/g,"")|| "";
+    console.log(prop2);
+    var intro = "简介";
+    
+    queryDatabase(name,name,"北邮",prop2).then(function(result){
+        if(result== 1){
+            session.send('答案：肯定啊');
+        }else if (result == 0) {
+            session.send('答案：还不是，555555');
+        }else{
+            session.send('答案：'+result);
+        }
+    })
 
 }).triggerAction({
     matches: '学校信息'
