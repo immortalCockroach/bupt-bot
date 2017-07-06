@@ -60,6 +60,9 @@ var instructions = 'Welcome to Bupt Question-answer Online Bot!Input \'Help\' fo
 
 var bot = new builder.UniversalBot(connector, function (session) {
 
+    var text = session.message.text.toLocaleLowerCase();
+
+
 
     // var reply = new builder.Message()
     //     .address(session.message.address);
@@ -119,7 +122,6 @@ bot.dialog('peopleName', function (session, args) {
     var entityList = ['职位','实验室','学校','时间','项目','数字','等级','机构','学院','属性'];
     var entities = args.intent.entities;
     var intent = args.intent;
-    console.log(intent);
     console.log(entities);
     
     var academic = builder.EntityRecognizer.findEntity(args.intent.entities,'学院');
@@ -164,8 +166,7 @@ bot.dialog('peopleName', function (session, args) {
     }
 
 }).triggerAction({
-    matches: '人物名称',
-    intentThreshold: 0.001
+    matches: '人物名称'
 });
 
 //成立时间
@@ -187,7 +188,7 @@ bot.dialog('startTime', function (session, args) {
     // 最小单位+职位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var startTime = "成立时间";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,startTime).then(function(result){
@@ -234,7 +235,7 @@ bot.dialog('introduction', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -273,13 +274,13 @@ bot.dialog('website', function (session, args) {
 
     var leastLevel = academic?academic:school;
     console.log(leastLevel);
-    
+
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var website = "网址";
-        
+
         if (name!="学校") {
             queryDatabase(name,name,nameValue,website).then(function(result){
                 if(result){
@@ -301,8 +302,7 @@ bot.dialog('website', function (session, args) {
     }
 
 }).triggerAction({
-    matches: '网址',
-    intentThreshold: 0.01
+    matches: '网址'
 });
 
 //电话号码
@@ -326,7 +326,7 @@ bot.dialog('phone', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var phone = "联系电话";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,phone).then(function(result){
@@ -373,7 +373,7 @@ bot.dialog('teacherNum', function (session, args) {
 
     if(academic){
         var name = "学院";
-        var prop1 = academic.entity.replace(/\s+/g, "")|| "";
+        var prop1 = (academic.resolution.values[0]?academic.resolution.values[0]:academic.entity).replace(/\s+/g, "") || "";
         for(var i in entities){
             if(entities[i].type!="学院"){
                 var prop2= entities[i].entity.replace(/\s+/g, "")+"人数" || "";
@@ -417,7 +417,7 @@ bot.dialog('list', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -457,7 +457,7 @@ bot.dialog('workplace', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -498,7 +498,7 @@ bot.dialog('address', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -538,7 +538,7 @@ bot.dialog('numberCollect', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -578,7 +578,7 @@ bot.dialog('timeSearch', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -618,7 +618,7 @@ bot.dialog('research', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -658,7 +658,7 @@ bot.dialog('prebuiltTime', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
         var intro = "简介";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
@@ -698,8 +698,8 @@ bot.dialog('email', function (session, args) {
     // 最小单位
     if(leastLevel){
         var name = leastLevel.type.replace(/\s+/g, "") || "";
-        var nameValue = leastLevel.entity.replace(/\s+/g, "") || "";
-        var intro = "简介";
+        var nameValue = (leastLevel.resolution.values[0]?leastLevel.resolution.values[0]:leastLevel.entity).replace(/\s+/g, "") || "";
+        var intro = "邮箱";
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
                 session.send('答案：'+result);
@@ -714,6 +714,37 @@ bot.dialog('email', function (session, args) {
 
 }).triggerAction({
     matches: '邮箱地址'
+});
+
+//学校信息
+bot.dialog('schoolinfo', function (session, args) {
+    // retrieve hotel name from matched entities
+    var entityList = ['实验室','学校','学院','项目','机构','属性'];
+    var entities = args.intent.entities;
+    var intent = args.intent;
+    console.log(entities);
+    
+    var school = builder.EntityRecognizer.findEntity(args.intent.entities,'学校');
+    var info = builder.EntityRecognizer.findEntity(args.intent.entities,'学校属性');
+
+
+    var name = "学校";
+    var prop2 = info.entity.replace(/\s+/g,"").replace(/多少/g, "").replace(/数/g,"").replace(/学校/g,"").replace(/高校/g,"")|| "";
+    console.log(prop2);
+    var intro = "简介";
+    
+    queryDatabase(name,name,"北邮",prop2).then(function(result){
+        if(result== 1){
+            session.send('答案：肯定啊');
+        }else if (result == 0) {
+            session.send('答案：还不是，555555');
+        }else{
+            session.send('答案：'+result);
+        }
+    })
+
+}).triggerAction({
+    matches: '学校信息'
 });
 
 
