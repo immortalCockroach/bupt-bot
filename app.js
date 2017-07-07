@@ -61,7 +61,8 @@ var instructions = 'Welcome to Bupt Question-answer Online Bot!Input \'Help\' fo
 var bot = new builder.UniversalBot(connector, function (session) {
 
     var text = session.message.text.toLocaleLowerCase();
-
+    session.send('Sorry, I did not understand \'%s\'. Type \'help\' if you need assistance.', session.message.text);
+    
 
 
     // var reply = new builder.Message()
@@ -117,7 +118,8 @@ var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
 bot.recognizer(recognizer);
 
 //人物名称
-bot.dialog('peopleName', function (session, args) {
+bot.dialog('peopleName', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['职位','实验室','学校','时间','项目','数字','等级','机构','学院','属性'];
     var entities = args.intent.entities;
@@ -146,9 +148,9 @@ bot.dialog('peopleName', function (session, args) {
             var positionName = (position.resolution?position.resolution.values[0]:position.entity).replace(/\s+/g, "") || "";
             queryDatabase(name,name,nameValue,positionName).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
@@ -156,21 +158,25 @@ bot.dialog('peopleName', function (session, args) {
             var positionName = position.entity.replace(/\s+/g, "") || "";
             queryDatabase(name,name,"北邮",positionName).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
     
     }
 
-}).triggerAction({
+},
+function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '人物名称'
 });
 
 //成立时间
-bot.dialog('startTime', function (session, args) {
+bot.dialog('startTime', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','属性'];
     var entities = args.intent.entities;
@@ -193,28 +199,32 @@ bot.dialog('startTime', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,startTime).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",startTime).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
     }
 
-}).triggerAction({
+},
+function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '成立时间'
 });
 
 //简介
-bot.dialog('introduction', function (session, args) {
+bot.dialog('introduction', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -241,29 +251,32 @@ bot.dialog('introduction', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '简介'
 });
 
 //网址
-bot.dialog('website', function (session, args) {
+bot.dialog('website', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['学校','学院'];
     var entities = args.intent.entities;
@@ -286,29 +299,32 @@ bot.dialog('website', function (session, args) {
         if (name!="学校") {
             queryDatabase(name,name,nameValue,website).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",website).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results);
+}]).triggerAction({
     matches: '网址'
 });
 
 //电话号码
-bot.dialog('phone', function (session, args) {
+bot.dialog('phone', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['学校','学院','实验室','机构','职位','属性'];
     var entities = args.intent.entities;
@@ -333,29 +349,32 @@ bot.dialog('phone', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,phone).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",phone).then(function(result){
                if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
     
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '电话号码'
 });
 
 //教师人数
-bot.dialog('teacherNum', function (session, args) {
+bot.dialog('teacherNum', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['中心','实体','职称','导师','人才名称','学院'];
     var entities = args.intent.entities;
@@ -385,21 +404,24 @@ bot.dialog('teacherNum', function (session, args) {
         
         queryDatabase(name,name,prop1,prop2).then(function(result){
             if(result){
-                session.send('答案：'+result);
-            }else{
-                session.send('对不起，该信息官网还未透露~~');
+                    next({response:result});
+                }else{
+                    next({response:'对不起，该信息官网还未透露~~'});
             }
         })
         
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '教师人数'
 });
 
 //列表  没处理。。。
-bot.dialog('list', function (session, args) {
+bot.dialog('list', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -425,29 +447,32 @@ bot.dialog('list', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '列表'
 });
 
 //办公室
-bot.dialog('workplace', function (session, args) {
+bot.dialog('workplace', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -473,29 +498,32 @@ bot.dialog('workplace', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,prop).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",prop).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '办公室'
 });
 
 //地址
-bot.dialog('address', function (session, args) {
+bot.dialog('address', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     console.log('address');
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
@@ -522,29 +550,32 @@ bot.dialog('address', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '地址'
 });
 
 //数量统计
-bot.dialog('numberCollect', function (session, args) {
+bot.dialog('numberCollect', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -571,29 +602,32 @@ bot.dialog('numberCollect', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,num).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",num).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '数量统计'
 });
 
 //时间查询   没有搞。。。
-bot.dialog('timeSearch', function (session, args) {
+bot.dialog('timeSearch', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -619,29 +653,32 @@ bot.dialog('timeSearch', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '时间查询'
 });
 
 //研究方向
-bot.dialog('research', function (session, args) {
+bot.dialog('research', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -669,21 +706,24 @@ bot.dialog('research', function (session, args) {
         if(name =="人名"){
             queryDatabase("老师","老师",nameValue,way).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '研究方向'
 });
 
 //筹建时间 没搞。。。
-bot.dialog('prebuiltTime', function (session, args) {
+bot.dialog('prebuiltTime', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -709,29 +749,32 @@ bot.dialog('prebuiltTime', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '筹建时间'
 });
 
 //邮箱地址
-bot.dialog('email', function (session, args) {
+bot.dialog('email', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -757,29 +800,32 @@ bot.dialog('email', function (session, args) {
         if(name!="学校"){
             queryDatabase(name,name,nameValue,intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }else{
             queryDatabase(name,name,"北邮",intro).then(function(result){
                 if(result){
-                    session.send('答案：'+result);
+                    next({response:result});
                 }else{
-                    session.send('对不起，该信息官网还未透露~~');
+                    next({response:'对不起，该信息官网还未透露~~'});
                 }
             })
         }
         
     }
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '邮箱地址'
 });
 
 //学校信息
-bot.dialog('schoolinfo', function (session, args) {
+bot.dialog('schoolinfo', [function (session, args,next) {
+    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['实验室','学校','学院','项目','机构','属性'];
     var entities = args.intent.entities;
@@ -797,15 +843,17 @@ bot.dialog('schoolinfo', function (session, args) {
     
     queryDatabase(name,name,"北邮",prop2).then(function(result){
         if(result== 1){
-            session.send('答案：肯定啊');
+            next({response:'答案：肯定啊'});
         }else if (result == 0) {
-            session.send('答案：还不是，555555');
+            next({response:'答案：还不是，555555'});
         }else{
-            session.send('答案：'+result);
+            next({response:'答案：'+result});
         }
     })
 
-}).triggerAction({
+},function (session, results) {
+    session.send(results.response);
+}]).triggerAction({
     matches: '学校信息'
 });
 
