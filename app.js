@@ -217,7 +217,7 @@ bot.dialog('startTime', [function (session, args,next) {
 
 },
 function (session, results) {
-    session.send(results.response);
+    session.send(''+results.response);
 }]).triggerAction({
     matches: '成立时间'
 });
@@ -317,7 +317,7 @@ bot.dialog('website', [function (session, args,next) {
     }
 
 },function (session, results) {
-    session.send(results);
+    session.send(''+results);
 }]).triggerAction({
     matches: '网址'
 });
@@ -367,7 +367,7 @@ bot.dialog('phone', [function (session, args,next) {
     }
 
 },function (session, results) {
-    session.send(results.response);
+    session.send(''+results.response);
 }]).triggerAction({
     matches: '电话号码'
 });
@@ -414,7 +414,7 @@ bot.dialog('teacherNum', [function (session, args,next) {
     }
 
 },function (session, results) {
-    session.send(results.response);
+    session.send(''+results.response);
 }]).triggerAction({
     matches: '教师人数'
 });
@@ -620,7 +620,7 @@ bot.dialog('numberCollect', [function (session, args,next) {
     }
 
 },function (session, results) {
-    session.send(results.response);
+    session.send(''+results.response);
 }]).triggerAction({
     matches: '数量统计'
 });
@@ -852,7 +852,7 @@ bot.dialog('schoolinfo', [function (session, args,next) {
     })
 
 },function (session, results) {
-    session.send(results.response);
+    session.send(''+results.response);
 }]).triggerAction({
     matches: '学校信息'
 });
