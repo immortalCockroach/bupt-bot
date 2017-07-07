@@ -119,7 +119,7 @@ bot.recognizer(recognizer);
 
 //人物名称
 bot.dialog('peopleName', [function (session, args,next) {
-    session.send(' alei-bot正在分析你的问题: \'%s\'', session.message.text+"......");
+    session.send(' alei-bot正在分析你的问题  : \'%s\'', session.message.text+"......");
     // retrieve hotel name from matched entities
     var entityList = ['职位','实验室','学校','时间','项目','数字','等级','机构','学院','属性'];
     var entities = args.intent.entities;
